@@ -3,6 +3,7 @@ package ru.netology.manager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.netology.domain.Ticket;
+import ru.netology.domain.TicketComparator;
 import ru.netology.repository.TicketRepository;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -110,4 +111,35 @@ public class TicketManagerTest {
 
         assertArrayEquals(expected, actual);
     }
+
+    /**
+     * Поиск по параметрам и сортировка по времени полета
+     */
+    @Test
+    public void shouldSortTicketsByDuration() {
+        String from = "MOV";
+        String to = "LED";
+
+        tickets = new Ticket[5];
+        tickets[0] = new Ticket(1, 3000, "MOV", "LED", 120);
+        tickets[1] = new Ticket(2, 1200, "MOV", "LED", 90);
+        tickets[2] = new Ticket(3, 1500, "MOV", "LED", 100);
+        tickets[3] = new Ticket(4, 4000, "MOV", "LED", 130);
+        tickets[4] = new Ticket(5, 2000, "MOV", "LED", 125);
+
+
+        Ticket[] expected = {tickets[1], tickets[2], tickets[0], tickets[4], tickets[3]};
+
+        manager.addTicket(tickets[0]);
+        manager.addTicket(tickets[1]);
+        manager.addTicket(tickets[2]);
+        manager.addTicket(tickets[3]);
+        manager.addTicket(tickets[4]);
+
+        Ticket[] actual = manager.findAll(from, to, new TicketComparator());
+
+        assertArrayEquals(expected, actual);
+    }
+
+
 }
